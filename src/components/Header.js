@@ -1,13 +1,22 @@
-const Header = ({data}) => {
+const Header = ({data, padding}) => {
     return (
-        <div className="header">
+        <div className="header-container">
             {
-                Object.entries(data).map(([key, value]) => (
-                    <div>
-                        {key}
-                    </div>
-                  ))
+                Array.from({length: padding}).map((el, index) => (
+                    <div key={index} className="table-padding"></div>
+                ))
             }
+            <div className="header">
+                <div className="value"></div>
+                {
+                    Object.entries(data).map(([key, value]) => (
+                        <div key={key} className="value">
+                            {key}
+                        </div>
+                    ))
+                }
+                <div className="value">delete</div>
+            </div>
         </div>
     );
 }
