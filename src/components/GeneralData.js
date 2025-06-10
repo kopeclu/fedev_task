@@ -1,7 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Header from "./Header";
 
-const GeneralData = ({data, child, padding}) => {
+const GeneralData = ({data, onDelete, padding}) => {
     const [showChild, setShowChild] = useState(false);
 
     return (
@@ -30,35 +30,40 @@ const GeneralData = ({data, child, padding}) => {
                             </div>
                         ))
                     }
-                    <div className="value">del</div>
+                    <div
+                        className="value"
+                        onClick={() => onDelete?.(data)}>
+                        del
+                    </div>
                 </div>
             </div>
-            {/* Nemesis children */}
+            {/* Children */}
             {
                 showChild &&
-                Object.keys(data.children).includes('has_nemesis') &&
-                <>
-                    <Header data={data.children.has_nemesis.records[0].data} padding={padding+1} />
-                    {
-                        data.children.has_nemesis.records.map((el, index) => (
-                            <GeneralData key={index} data={el} child={child+1} padding={padding+1}  />
-                        ))
-                    }
-                </>
+                Object.entries(data.children).map(([key, childType]) => (
+                    <React.Fragment key={key}>
+                        <Header data={childType.records[0].data} padding={padding+1} />
+                        {
+                            childType.records.map((el, index) => (
+                                <GeneralData
+                                    key={index}
+                                    data={el}
+                                    onDelete={(toDelete) => {
+                                        childType.records = childType.records.filter(
+                                            (el) => el !== toDelete
+                                        )
+                                        // Rerender immediately
+                                        onDelete?.(data);
+                                    }}
+                                    padding={padding+1}
+                                />
+                            ))
+                        }
+                    </React.Fragment>
+                ))
+
             }
-            {/* Secrete children */}
-            {
-                showChild &&
-                Object.keys(data.children).includes('has_secrete') &&
-                <>
-                    <Header data={data.children.has_secrete.records[0].data} padding={padding+1} />
-                    {
-                        data.children.has_secrete.records.map((el, index) => (
-                            <GeneralData key={index} data={el} child={child+1} padding={padding+1} />
-                        ))
-                    }
-                </>
-            }
+            
         </>
     );
 }
