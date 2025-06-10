@@ -1,25 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import './styles/style.css';
+
+import React, { useEffect, useState } from "react";
+import GeneralData from "./components/GeneralData";
+import Header from "./components/Header";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [data, setData] = useState(null);
+    // Add error detector that could tell user whats wrong
+
+    // Fetch data
+    useEffect(() => {
+        const fetchData = async () => {
+        try {
+            const response = await fetch('/data.json');
+            const jsonData = await response.json();
+            setData(jsonData);
+        } catch (error) {
+            console.log(error);
+            // Signalize to error detector
+        }
+        }
+        fetchData();
+    }, [])
+  
+    return (
+        <div className="App">
+        {
+            data &&
+            <React.Fragment>
+            <Header data={data[0].data} padding={0} />
+            {
+                data.map((el, index) => (
+                <GeneralData
+                    key={`${el.data.ID}-${index}`}
+                    data={el}
+                    onDelete={(toDelete) => {
+                        setData((data) => data.filter((el) => el !== toDelete))
+                    }}
+                    padding={0}
+                />
+                ))
+            }
+            </React.Fragment>
+        }
+        {
+            // If error display whats wrong
+        }
+        </div>
+    );
 }
 
 export default App;

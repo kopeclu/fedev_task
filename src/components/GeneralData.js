@@ -3,22 +3,23 @@ import Header from "./Header";
 
 const GeneralData = ({data, onDelete, padding}) => {
     const [showChild, setShowChild] = useState(false);
+    const [, setForceUpdate] = useState(0);
 
     return (
         <>
             {/* Main data */}
             <div className="data-container">
-                {
-                    Array.from({length: padding}).map((el, index) => (
-                        <div key={index} className="table-padding"></div>
-                    ))
-                }
+            {
+                Array.from({length: padding}).map((el, index) => (
+                    <div key={index} className="table-padding"></div>
+                ))
+            }
                 <div className="data">
                     <div className="value">
                     {
-                        Object.keys(data.children).length !== 0 &&
+                        Object.values(data.children).some(child => child.records.length > 0) &&
                         <button
-                        onClick={() => (showChild ? setShowChild(false) : setShowChild(true))}>
+                            onClick={() => (showChild ? setShowChild(false) : setShowChild(true))}>
                             show
                         </button>
                     }
@@ -37,30 +38,34 @@ const GeneralData = ({data, onDelete, padding}) => {
                     </div>
                 </div>
             </div>
+
             {/* Children */}
             {
                 showChild &&
-                Object.entries(data.children).map(([key, childType]) => (
-                    <React.Fragment key={key}>
+                Object.entries(data.children).map(([key, childType]) => {
+                    if (!childType.records.length) return null;
+                    return (
+                        <React.Fragment key={key}>
                         <Header data={childType.records[0].data} padding={padding+1} />
                         {
                             childType.records.map((el, index) => (
                                 <GeneralData
-                                    key={index}
+                                    key={`${el.data.ID}-${index}`}
                                     data={el}
                                     onDelete={(toDelete) => {
                                         childType.records = childType.records.filter(
                                             (el) => el !== toDelete
                                         )
                                         // Rerender immediately
-                                        onDelete?.(data);
+                                        setForceUpdate((v) => v + 1);
                                     }}
                                     padding={padding+1}
                                 />
                             ))
                         }
-                    </React.Fragment>
-                ))
+                        </React.Fragment>
+                    )
+                })
 
             }
             
