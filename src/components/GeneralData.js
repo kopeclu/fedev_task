@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Header from "./Header";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faChevronRight, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const GeneralData = ({data, onDelete, padding}) => {
     const [showChild, setShowChild] = useState(false);
@@ -9,32 +11,34 @@ const GeneralData = ({data, onDelete, padding}) => {
         <>
             {/* Main data */}
             <div className="data-container">
-            {
+            {   // Padding
                 Array.from({length: padding}).map((el, index) => (
                     <div key={index} className="table-padding"></div>
                 ))
             }
                 <div className="data">
-                    <div className="value">
+                    <div className="value-container">
                     {
                         Object.values(data.children).some(child => child.records.length > 0) &&
-                        <button
-                            onClick={() => (showChild ? setShowChild(false) : setShowChild(true))}>
-                            show
-                        </button>
+                        <div className="value">
+                            <FontAwesomeIcon
+                                icon={showChild ? faChevronDown : faChevronRight}
+                                onClick={() => setShowChild(!showChild)}
+                            />
+                        </div>
                     }
                     </div>
                     {
                         Object.entries(data.data).map(([key, value]) => (
-                            <div key={key} className="value">
-                                {value}
+                            <div key={key} className="value-container">
+                                <div className="value">
+                                    {value}
+                                </div>
                             </div>
                         ))
                     }
-                    <div
-                        className="value"
-                        onClick={() => onDelete?.(data)}>
-                        del
+                    <div className="value-container" onClick={() => onDelete?.(data)}>
+                        <FontAwesomeIcon className="value delete" icon={faXmark} />
                     </div>
                 </div>
             </div>
