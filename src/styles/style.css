@@ -1,0 +1,66 @@
+/* GENERAL */
+
+* {
+    margin: 0;
+    font-family: Arial;
+}
+
+.App {
+    background-color: rgb(84, 87, 87);
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+.header-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    background-color: aqua;
+    min-height: 35px;
+}
+
+/* DISPLAYED DATA */
+
+.data-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.data {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    background-color: rgb(32, 41, 41);
+    color: white;
+}
+
+.value-container {
+    width: 120px;
+    min-height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.value {
+    text-wrap: wrap;
+    text-align: center;
+}
+
+/* OTHER */
+
+.table-padding {
+    width: 60px;
+}
+
+.delete {
+    color: red;
+    height: 30px;
+}
