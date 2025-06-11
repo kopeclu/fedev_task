@@ -10,7 +10,7 @@ const Header = ({data, padding}) => {
                 <div className="value-container"></div>
                 {
                     Object.entries(data).map(([key, value]) => (
-                        <div className="value-container">
+                        <div key={key} className="value-container">
                             <div key={key} className="value">
                                 {key}
                             </div>
