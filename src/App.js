@@ -26,13 +26,14 @@ function App() {
     return (
         <div className="App">
         {
-            data &&
+            data && data.length > 0 &&
             <React.Fragment>
-            <Header data={data[0].data} padding={0} />
+                <Header data={data[0].data} padding={0} />
             {
                 data.map((el, index) => (
                 <GeneralData
-                    key={`${el.data.ID}-${index}`}
+                    key={`${el.data.ID}-${index}`} // Not unique ID, so use combination with index, not ideal -> index changes when something's deleted
+                                                   // Solution: make unique ID (with no duplicates), or create other identifier for every record
                     data={el}
                     onDelete={(toDelete) => {
                         setData((data) => data.filter((el) => el !== toDelete))
